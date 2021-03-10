@@ -30,7 +30,7 @@ var mongoose = require("mongoose");
 
 //connect to MongoDB
 let url = "mongodb://localhost:27017/Demo";
-let client = mongoose.createConnection(url, { useNewUrlParser: true });
+let client = mongoose.createConnection(url, { useNewUrlParser: true ,useUnifiedTopology: true});
 client.on("error", console.error.bind(console, "Error with DB connection"));
 console.log(mongoose.connection.readyState);
 client.on("connected", () => {
@@ -46,6 +46,7 @@ client.on("connected", () => {
   app.use("/", userRoute);
 });
 
+module.exports = client;
 // const newContext = {}
 // newContext.mongoseConnection = client;
 
