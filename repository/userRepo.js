@@ -1,6 +1,6 @@
 
 // const context = require('context')
-const userModel = require('../models/userModel')
+const schema = require('../models/userModel')
 //const context = require('context')
 const con = require('../index')
 

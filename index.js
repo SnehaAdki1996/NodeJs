@@ -1,53 +1,39 @@
-// var express = require('express');
-// var app = express()
-// var mongoose = require('mongoose')
 
-// //LocalHost to hit API at port 3000
-// app.listen(3000,function(){
-//     console.log("Listening to port 3000");
-// })
-
-const userRoute = require("./router/user");
-var bodyParser = require("body-parser");
-
-// app.use(bodyParser.urlencoded({extended : true}))
-// app.use(cors({ origin: "http://localhost:4200" }))
-//console.log(app)
-// app.get('/',function(req,res,next){
-//     res.status(  200).json({success : 'Send success'})
-//     res.send('Hello World')
-//     next()
-// })
-// app.use('/',router)
-
-// module.exports = app;
 
 var express = require("express");
 
 var mongoose = require("mongoose");
 
-// const context = require('context');
+var bodyParser = require('body-parser')
+var app = express();
+
+require('dotenv').config()
+
+var userRoute = require('./router/user')
+
 
 //connect to MongoDB
-let url = "mongodb://localhost:27017/Demo";
-let client = mongoose.createConnection(url, { useNewUrlParser: true ,useUnifiedTopology: true});
-client.on("error", console.error.bind(console, "Error with DB connection"));
-console.log(mongoose.connection.readyState);
-client.on("connected", () => {
-  console.log("Connected Successfully!...");
-  var app = express();
+// let url = "mongodb://localhost:27017/Demo";
+let db = mongoose.createConnection(process.env.DATA_BASE, { useNewUrlParser: true, useUnifiedTopology: true });
 
-  app.listen(3000, function () {
-    console.log("Listening to port 3000");
-  });
 
-  app.use(bodyParser.json());
+db.on("error", console.error.bind(console, "Error with DB connection"));
 
-  app.use("/", userRoute);
+db.on("connected", () => {
+    console.log("Connected Successfully!...");
 });
 
-module.exports = client;
+app.use(express.json());
+
+app.listen(3000, function () {
+    console.log("Listening to port 3000");
+});
+
+
+app.use("/", userRoute);
+
+module.exports = db;
 // const newContext = {}
-// newContext.mongoseConnection = client;
+// newContext.mongoseConnection = db;
 
 // context.put(newContext)

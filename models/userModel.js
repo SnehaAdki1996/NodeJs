@@ -1,9 +1,9 @@
 var mongoose =  require('mongoose')
 
 
-var schema = mongoose.Schema({
-    userName : String,  
+const schema = new mongoose.Schema({
+    userName : {type  : String}
 })
 
 
-module.exports = mongoose.model("userTable" , schema)
+module.exports = mongoose.model("userTable" , schema) 

@@ -1,28 +1,32 @@
-
-
-const express = require('express');
-const userModel = require('../models/userModel');
+const express = require("express");
+const userModel = require("../models/userModel");
 const router = express.Router();
-const client = require('../index')
-const mongoose = require('mongoose')
 
-const {UserRepo } = require('../repository/userRepo')
+const { UserRepo } = require("../repository/userRepo");
 
-router.post('/user',async(req,res) => {
-    console.log(client,mongoose)
-    const user = new userModel({
-        name : req.body.name
-    });
-    let userData = []
 
-    userData.push({
-        
-        
-                name : req.body.name
-        
-    })
-    const userRepo = mongoose.models.userTable;
-    await userRepo.collection.insertOne(userData)
-    res.send(user);
-})
-module.exports = router
+router.get("/data", async(req, res) => {
+    try{
+        const user = await userModel.find()
+        res.status(200).json(user)
+    }catch(err){
+        res.status(500).json({message : err.messgae})
+    }
+    // res.send('Hello World')
+});
+
+router.post("/user", async (req, res) => {
+  const user = new userModel({
+    name: req.body.name,
+  });
+  
+
+  try{
+    const newUSer = await user.save()
+    res.status(201).json({data : newUSer})
+  }
+  catch(err){
+    res.status(400).json({message : err.message})
+  }
+});
+module.exports = router;
