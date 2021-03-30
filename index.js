@@ -1,39 +1,38 @@
 
 
-var express = require("express");
+const express = require("express");
+const app = express();
+const morgan = require('morgan')
+const userRoutes = require('./router/user')
+const mongoose = require('mongoose')
 
-var mongoose = require("mongoose");
+const  validationResult  = require('express-validator')
 
-var bodyParser = require('body-parser')
-var app = express();
+const dotenv = require('dotenv')
 
-require('dotenv').config()
-
-var userRoute = require('./router/user')
-
-
-//connect to MongoDB
-// let url = "mongodb://localhost:27017/Demo";
-let db = mongoose.createConnection(process.env.DATA_BASE, { useNewUrlParser: true, useUnifiedTopology: true });
+//body-parser we don't get the parsed data 
+const bodyParser = require('body-parser')
 
 
-db.on("error", console.error.bind(console, "Error with DB connection"));
+//to get access for the .env global variables
+dotenv.config()
 
-db.on("connected", () => {
-    console.log("Connected Successfully!...");
+
+//configure to db ie connecting to DB
+mongoose.connect(process.env.DATABASE_URL,{ useNewUrlParser: true , useUnifiedTopology: true })
+.then( () => console.log("connected to DB"))
+.catch( (err) => console.log(err))
+
+//middleware
+app.use(morgan("dev"))
+
+app.use(bodyParser.json());
+app.use(validationResult());
+app.use("/",userRoutes)
+
+app.listen(process.env.PORT, function () {
+    console.log(`Listening to port ${process.env.PORT}`);
 });
 
-app.use(express.json());
-
-app.listen(3000, function () {
-    console.log("Listening to port 3000");
-});
 
 
-app.use("/", userRoute);
-
-module.exports = db;
-// const newContext = {}
-// newContext.mongoseConnection = db;
-
-// context.put(newContext)

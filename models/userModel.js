@@ -1,9 +1,10 @@
 var mongoose =  require('mongoose')
 
 
-const schema = new mongoose.Schema({
-    userName : {type  : String}
+const userSchema = new mongoose.Schema({
+    userName : {type  : String,required :true},
+    data : {type  : String,required : true}
 })
 
 
-module.exports = mongoose.model("userTable" , schema) 
+module.exports = mongoose.model("userModel" , userSchema) 

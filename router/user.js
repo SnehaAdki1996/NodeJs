@@ -1,32 +1,30 @@
-const express = require("express");
-const userModel = require("../models/userModel");
-const router = express.Router();
+const {getUser, getUserById,postUser} = require('../controllers/user')
 
-const { UserRepo } = require("../repository/userRepo");
+const {check} = require('express-validator')
+
+const express = require('express')
+const validator = require('../Validatior/userValidator')
 
 
-router.get("/data", async(req, res) => {
-    try{
-        const user = await userModel.find()
-        res.status(200).json(user)
-    }catch(err){
-        res.status(500).json({message : err.messgae})
-    }
-    // res.send('Hello World')
-});
+const router = express.Router()
 
-router.post("/user", async (req, res) => {
-  const user = new userModel({
-    name: req.body.name,
-  });
-  
+router.get('/',getUser)
+router.get('/:id',getUserById)
+router.post('/',validator.createUserValidator, postUser)
 
-  try{
-    const newUSer = await user.save()
-    res.status(201).json({data : newUSer})
-  }
-  catch(err){
-    res.status(400).json({message : err.message})
-  }
-});
-module.exports = router;
+// router.post('/' , 
+// [check('userName')
+// .isLength({ min: 5 })
+// .withMessage('must be at least 5 chars long')],
+// userController.postUser
+// )
+
+
+module.exports = router
+
+
+
+//Either this way
+// module.exports = {
+//   userGet
+// }
