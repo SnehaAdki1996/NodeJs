@@ -13,6 +13,7 @@ exports.getUser = (req, res) => {
 }
 
 exports.getUserById = (req,res) => {
+    
     userPost.findById({_id : req.params.id}) 
     .then(result => {
         res.json({data : result})
